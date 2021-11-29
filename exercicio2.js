@@ -1,8 +1,46 @@
 // Faça o exercício da GALERIA DE IMAGENS aqui
 // Este arquivo AINDA NÃO ESTÁ INCLUÍDO no arquivo HTML
+/* 
+### Exercício 2: galeria de imagens
 
-const servidorDasImagens = 'https://fegemo.github.io/cefet-web/images/osiris';
+Agora você vai criar uma galeria de imagens. Os botões `#anterior`
+e `#proximo` devem permitir que o usuário alterne a imagem que está
+sendo exibida e o código para isso deve ser feito no arquivo `exercicio2.js`.
+
+A ideia geral é usar eventos de `click` nos botões e alterar o
+caminho (atributo `src`) da imagem `#slide` (ver [FAQ](#faq) como trocar
+um atributo de um elemento HTML). Algo que pode ajudar é manter uma variável
+que indique o **índice da imagem atual**. => um "array" com a posição da imagem
+dentre todas da galeria?
+
+Ao abrir `exercicio2.js` alunos atenciosos vão reparar que as imagens 
+foram dadas como um **vetor de objetos** da seguinte forma:
+
+```js
 const imagens = [
+  {
+    nome: 'nome-da-imagem.webp',
+    descricao: 'O texto alternativo que a descreve'
+  },
+  ...
+];
+```
+
+Além do atributo `src`, defina também o `alt` com o texto descritivo.
+Para acessar uma propriedade de um objeto, lembre-se no [FAQ](#faq).
+E também repare que as imagens estão hospedadas em um servidor web.
+Portanto, seus caminhos devem ser concatenas (servidor e nome) para
+que sejam encontradas.
+
+Por fim, faça com que a galeria seja "circular": ao ultrapassar a 
+última ou a primeira imagem, ela deve voltar para a primeira ou a última,
+respectivamente. Veja o [FAQ](#faq) se precisar de ideias sobre isso.*/
+
+
+const servidorDasImagens = 'https://fegemo.github.io/cefet-web/images/osiris'; //"files not found"?
+const imagens = [
+
+
     {
       arquivo: '01-modelo-artistico-da-sonda.webp',
       descricao: 'Imagem em 3D mostrando a sonda tocando um asteróide. ' +
@@ -54,3 +92,68 @@ const imagens = [
     }
   ];
 
+  //botoes 'anterior' e 'proximo' => [query-selector-all]: https://fegemo.github.io/cefet-web/classes/js2/#selecionando-varios-elementos
+
+
+  let anterior = document.querySelector('#anterior'); //#anterior e não anterior
+
+  let proximo = document.querySelector('#proximo'); 
+
+ // slide
+
+  let slide = document.querySelector('#slide');
+
+  //setar o indice das imagems para a galeria
+
+  let index = 0; let i = 0;
+
+  let imgDescription = (slide.src.substring(servidorDasImagens.length)); //será isso mesmo? 
+
+
+  for(i; i< imagens.length; i++) {
+    if (imagens[i].arquivo == imgDescription) //fazer algo que sirva pra designar a descrição da dita imagem
+    {
+      index = i;
+    }
+
+  }
+
+  //query para ambos anterior e proximo, e forma de percorrer as imagens feitos. 
+  //Fazer algum handler de evento para os ditos 2 botões
+
+/* A ideia geral é usar eventos de `click` nos botões e alterar o
+caminho (atributo `src`) da imagem `#slide`*/
+
+  anterior.addEventListener('click', function()
+  {
+    if (index > 0)
+    {
+      index = index--;
+    }
+    else 
+    {
+      index = (imagens.length-1); //regredir no indice
+      //só funciona uma única vez
+    }
+
+    slide.src = servidorDasImagens + '/' + imagens[index].arquivo;
+    slide.alt = servidorDasImagens + '/' + imagens[index].descricao; //"The alt property sets or returns the value of the alt attribute of an image."
+
+  });
+
+  proximo.addEventListener('click', function()
+  {
+    if (index < (imagens.length-1)) //avançar no indice
+    {
+      index = index++;
+    }
+    else index = 0;
+    
+    //concatenar as strings
+    slide.src = servidorDasImagens + '/' + imagens[index].arquivo;
+    slide.alt = servidorDasImagens + '/' + imagens[index].descricao; //"The alt property sets or returns the value of the alt attribute of an image."
+
+  });
+
+  //pendente de ser inserido no index.html
+  //<script src ="exercicio2.js"></script>
